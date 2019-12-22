@@ -9,17 +9,10 @@ router.get('/', (req,res) => {
     res.sendFile('index.html');
 });
 
-app.post("/user", jsonParser, function (request, response) {
-  console.log(request.body);
+app.post("/userSend", jsonParser, function (request, response) {
   if(!request.body) return response.sendStatus(400);
-   
-  response.json(request.body); // отправляем пришедший ответ обратно
+  response.json(request.body); 
 });
-
-// app.get("/", function(request, response){
-//   response.sendFile(__dirname + "/public");
-// });
-
 
 app.use('/', router);
 app.listen(3000, function () {
