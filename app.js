@@ -1,13 +1,9 @@
 const express = require('express');
-const router = express.Router();
+var router = require('./router');
 const app = express();
 const jsonParser = express.json();
 
 app.use(express.static("public"));
-
-router.get('/', (req,res) => {
-    res.sendFile('index.html');
-});
 
 app.post("/userSend", jsonParser, function (request, response) {
   if(!request.body) return response.sendStatus(400);
