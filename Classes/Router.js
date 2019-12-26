@@ -11,17 +11,19 @@ module.exports = class Router {
             res.sendFile('index.html');
         });
 
-        this.router.post("/userSend", jsonParser, async(reg, res) => {
+        this.router.post("/userSend", jsonParser, async(req, res) => {
             let userData = false;
 
-            const usersData = await new Promise((cb) => fs.readFile('./user.json', cb));
+            let usersData = await new Promise((cb) => fs.readFile(`${ROOT_DIR}/user.json`, (err, data) => {
+                cb(data.toString());
+            }));
 
             console.log(usersData);
 
             JSON.parse(usersData).forEach((user) => userData = user.id === req.body.id ? user : userData);
 
-            if (!reg.body) return res.sendStatus(400);
-            res.json(reg.body);
+            if (!req.body) return res.sendStatus(400);
+            res.json(userData);
 
         });
         return this.router;
