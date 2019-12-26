@@ -5,15 +5,16 @@ const сalendar = new Vue({
         age: '',
     },
     created() {
-        
+
     },
     methods: {
         sendForm() {
             axios
                 .post(`/userSend`, {
                     body: {
-                        nameform: this.name,
-                        ageform: this.age,
+                        // nameform: this.name,
+                        // ageform: this.age,
+                        id: 2
                     }
                 })
                 .then((response) => {

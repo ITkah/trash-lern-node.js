@@ -1,16 +1,16 @@
 const express = require('express');
-var router = require('./router');
+let router = new(require('./Classes/Router'))();
 const app = express();
-const jsonParser = express.json();
 
-app.use(express.static("public"));
+(async() => {
 
-app.post("/userSend", jsonParser, function (request, response) {
-  if(!request.body) return response.sendStatus(400);
-  response.json(request.body); 
-});
+    router = await router.init();
 
-app.use('/', router);
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
-});
+    app.use(express.static("public"));
+
+    app.use('/', router);
+    app.listen(3000, function() {
+        console.log('Example app listening on port 3000!');
+    });
+
+})();
