@@ -46,5 +46,5 @@ const сalendar = new Vue({
                     console.log(error);
                 });
         }
-    },
+    }
 });

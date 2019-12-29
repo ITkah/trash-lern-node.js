@@ -68,7 +68,7 @@ app.post("/post/deleteUser", jsonParser, function (req, res) {
       data = JSON.stringify(users);
       fs.writeFileSync(jsonFile, data);
       res.send(user);
-   } else{
+   } else {
       res.status(404).send();
    }
      
