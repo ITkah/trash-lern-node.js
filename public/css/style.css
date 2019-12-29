@@ -1,0 +1,8 @@
+.user-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.user-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}

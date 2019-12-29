@@ -1,13 +1,14 @@
 const сalendar = new Vue({
     el: '#app',
     data: {
-        name: '',
-        age: '',
+        nameUser: '',
+        ageUser: '',
+        priceUser: '',
+        output: null,
     },
-    output: null,
     created() {
-        axios.get('/get')
-            .then(response => (this.output = response))
+        axios.get('/get/users')
+            .then(response => (this.output = response.data))
             .catch(error => (console.log(error)));
     },
     methods: {
@@ -15,8 +16,29 @@ const сalendar = new Vue({
             axios
                 .post(`/userSend`, {
                     body: {
-                        nameform: this.name,
-                        ageform: this.age,
+                        nameform: this.nameUser,
+                        ageform: this.ageUser,
+                        priceform: this.priceUser
+                    }
+                })
+                .then((response) => {
+                    console.log(response.data.body);
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        },
+        edit(id,name,age,price) {
+            this.nameUser = name;
+            this.ageUser = age;
+            this.priceUser = price;
+            axios
+                .post(`/userSend`, {
+                    body: {
+                        idUser: id,
+                        nameform: this.nameUser,
+                        ageform: this.ageUser,
+                        priceform: this.priceUser
                     }
                 })
                 .then((response) => {

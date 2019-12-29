@@ -12,11 +12,19 @@
 
     <div id="app">
         <form @submit.prevent="sendForm" method="POST">
-            <input type="text" placeholder="name" min="1" v-model="name" required>
-            <input type="number" placeholder="age" min="1" v-model="age" required>
+            <input type="text" placeholder="name" min="1" v-model="nameUser" required>
+            <input type="number" placeholder="age" min="1" v-model="ageUser" required>
+            <input type="number" placeholder="price" min="1" v-model="priceUser" required>
             <button type="submit">Отправить</button>
         </form>
-        {{output}}
+        <div class="user-container" v-for="data in output">
+            <div class="user-box">
+                <p>{{data.name}}</p>
+                <p>{{data.age}}</p>
+                <p>{{data.price}}</p>
+                <p v-on:click="edit(data.id,data.name,data.age,data.price)">Редактировать</p>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>

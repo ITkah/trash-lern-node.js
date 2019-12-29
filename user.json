@@ -1,16 +1,19 @@
 [{
         "id": 1,
         "name": "Tom",
-        "age": 24
+        "age": 24,
+        "price": 1000
     },
     {
         "id": 2,
         "name": "Bob",
-        "age": 27
+        "age": 27,
+        "price": 1000
     },
     {
         "id": 3,
         "name": "Alice",
-        "age": "23"
+        "age": "23",
+        "price": 1000
     }
 ]
