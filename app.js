@@ -8,56 +8,73 @@ const jsonParser = express.json();
 
 app.use(express.static("public"));
 
-// app.post("/post/userUpdate", jsonParser, function (request, response) {
-//    console.log(request.body);
-//    if(!request.body) return response.sendStatus(400);
-    
-//    response.json(request.body); 
-// });
-
-app.post("/post/userNew", jsonParser, function (req, res) {
-
-   if(!req.body) return res.sendStatus(400);
-
-   fs.readFile(jsonFile , 'utf8', function (err, data) {
-      if(data) {          
-            var nameUser = req.body.name;
-            var ageUser = req.body.age;
-            var priceUser = req.body.price;
-            var user = {name: nameUser, age: ageUser, price: priceUser};
-            
-            var data = fs.readFileSync(jsonFile, "utf8");
-            var users = JSON.parse(data);
-            
-            // находим максимальный id
-            var id = Math.max.apply(Math,users.map(function(o){return o.id;}))
-            // увеличиваем его на единицу
-            user.id = id + 1;
-            // добавляем пользователя в массив
-            users.push(user);
-            var data = JSON.stringify(users);
-            // перезаписываем файл с новыми данными
-            fs.writeFileSync(jsonFile, data);
-            res.send(data);
-         } else {
-            res.send("Error: " + err )
-         }
+app.get('/get/users', function (req, res) {
+   
+   fs.readFile(jsonFile, 'utf8', function (err, data) {
+      if (data) {
+         let users = JSON.parse(data);
+         res.send(users);
+      } else {
+         res.send("Error: " + err);
+      }
    });
 
 });
 
-app.get('/get/users', function (req, res) {
-      fs.readFile(jsonFile , 'utf8', function (err, data) {
-         if(data) {
-            let users = JSON.parse(data);
-            res.send(users);
-            } else {
-               res.send("Error: " + err )
-            }
-      });
- });
+app.post("/post/userNew", jsonParser, function (req, res) {
+
+   if (!req.body) return res.sendStatus(400);
+
+   let nameUser = req.body.name;
+   let ageUser = req.body.age;
+   let priceUser = req.body.price;
+   let user = {
+      name: nameUser,
+      age: ageUser,
+      price: priceUser
+   };
+
+   let data = fs.readFileSync(jsonFile, "utf8");
+
+   let users = JSON.parse(data);
+   let id = Math.max.apply(Math,users.map(function(o){return o.id;}))
+   user.id = id ++;
+   users.push(user);
+
+   data = JSON.stringify(users);
+   fs.writeFileSync(jsonFile, data);
+   res.send(user);
+});
+
+app.post("/post/deleteUser", jsonParser, function (req, res) {
+
+   if(!req.body) return res.sendStatus(400);
+
+   let id = req.body.id;
+   let data = fs.readFileSync(jsonFile, "utf8");
+   let users = JSON.parse(data);
+
+   let index = -1;
+
+   for(let i = 0; i < users.length; i++){
+      if(users[i].id == id){
+         index = i;
+         break;
+      }
+   }
+
+   if(index > -1){
+      let user = users.splice(index, 1)[0];
+      data = JSON.stringify(users);
+      fs.writeFileSync(jsonFile, data);
+      res.send(user);
+   } else{
+      res.status(404).send();
+   }
+     
+});
 
 app.use('/', router);
-app.listen(3000, function() {
-    console.log('Example app listening on port 3000!');
+app.listen(3000, function () {
+   console.log('Example app listening on port 3000!');
 });

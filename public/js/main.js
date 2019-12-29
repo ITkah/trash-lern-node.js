@@ -7,20 +7,18 @@ const сalendar = new Vue({
         output: null,
         button: 'Отправить'
     },
-    created() {
-        axios.get('/get/users')
-            .then(response => (this.output = response.data))
-            .catch(error => (console.log(error)));
+    async created() {
+        this.output = (await new Promise((cb) => axios.get('/get/users')
+            .then(cb)
+            .catch(error => console.log(error)))).data;
     },
     methods: {
         sendForm() {
             axios
                 .post(`/post/userNew`, {
-                    body: {
-                        nameUser: this.nameUser,
-                        ageUser: this.ageUser,
-                        priceUser: this.priceUser
-                    }
+                    name: this.nameUser,
+                    age: this.ageUser,
+                    price: this.priceUser
                 })
                 .then((response) => {
                     console.log(response);
@@ -34,6 +32,19 @@ const сalendar = new Vue({
             this.ageUser = age;
             this.priceUser = price;
             this.button = "Редактировать";
+        },
+        deleteUser(id) {
+            let deleteUser = id;
+            axios
+                .post(`/post/deleteUser`, {
+                    id: deleteUser,
+                })
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
     },
 });
