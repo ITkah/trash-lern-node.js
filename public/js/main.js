@@ -17,9 +17,9 @@ const сalendar = new Vue({
             axios
                 .post(`/post/userNew`, {
                     body: {
-                        nameform: this.nameUser,
-                        ageform: this.ageUser,
-                        priceform: this.priceUser
+                        nameUser: this.nameUser,
+                        ageUser: this.ageUser,
+                        priceUser: this.priceUser
                     }
                 })
                 .then((response) => {

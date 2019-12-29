@@ -11,7 +11,31 @@ app.post("/post/userUpdate", jsonParser, function (request, response) {
    console.log(request.body);
    if(!request.body) return response.sendStatus(400);
     
-   response.json(request.body); // отправляем пришедший ответ обратно
+   response.json(request.body); 
+});
+
+app.post("/post/userNew", jsonParser, function (req, res) {
+     
+   if(!req.body) return res.sendStatus(400);
+    
+   var nameUser = req.body.name;
+   var ageUser = req.body.age;
+   var priceUser = req.body.price;
+   var user = {name: nameUser, age: ageUser, price: priceUser};
+    
+   var data = fs.readFileSync("./user.json", "utf8");
+   var users = JSON.parse(data);
+    
+   // находим максимальный id
+   var id = Math.max.apply(Math,users.map(function(o){return o.id;}))
+   // увеличиваем его на единицу
+   user.id = id + 1;
+   // добавляем пользователя в массив
+   users.push(user);
+   var data = JSON.stringify(users);
+   // перезаписываем файл с новыми данными
+   fs.writeFileSync("./user.json", data);
+   res.send(user);
 });
 
 app.get('/get/users', function (req, res) {
