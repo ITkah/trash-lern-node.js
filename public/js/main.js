@@ -23,7 +23,7 @@ const сalendar = new Vue({
                     }
                 })
                 .then((response) => {
-                    console.log(response.data.body);
+                    console.log(response);
                 })
                 .catch((error) => {
                     console.log(error);
