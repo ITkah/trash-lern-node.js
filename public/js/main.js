@@ -4,17 +4,19 @@ const сalendar = new Vue({
         name: '',
         age: '',
     },
+    output: null,
     created() {
-
+        axios.get('/get')
+            .then(response => (this.output = response))
+            .catch(error => (console.log(error)));
     },
     methods: {
         sendForm() {
             axios
                 .post(`/userSend`, {
                     body: {
-                        // nameform: this.name,
-                        // ageform: this.age,
-                        id: 2
+                        nameform: this.name,
+                        ageform: this.age,
                     }
                 })
                 .then((response) => {
