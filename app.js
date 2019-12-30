@@ -46,19 +46,20 @@ app.post("/post/userNew", jsonParser, function(req, res) {
     res.send(users);
 });
 
-app.put("/api/users", jsonParser, function(req, res){
+app.put("/post/userNew", jsonParser, function(req, res){
       
     if(!req.body) return res.sendStatus(400);
-    
-    let userId = req.body.id;
+     
+    let idUser = req.body.id;
     let nameUser = req.body.name;
     let ageUser = req.body.age;
     let priceUser = req.body.price;
      
     let data = fs.readFileSync(jsonFile, "utf8");
     let users = JSON.parse(data);
+    let user;
     for(var i = 0; i < users.length; i++){
-        if(users[i].id == userId){
+        if(users[i].id == idUser){
             user = users[i];
             break;
         }

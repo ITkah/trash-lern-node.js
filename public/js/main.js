@@ -6,7 +6,8 @@ const сalendar = new Vue({
         ageUser: '',
         priceUser: '',
         output: null,
-        button: 'Отправить'
+        button: 'Отправить',
+        isEdit: false,
     },
     async created() {
         this.output = (await new Promise((cb) => axios.get('/get/users')
@@ -14,9 +15,11 @@ const сalendar = new Vue({
             .catch(error => console.log(error)))).data;
     },
     methods: {
-        sendForm() {
-            axios
-                .post(`/post/userNew`, {
+        actionButton() {
+            this.isEdit ? this.sendForm("put") : this.sendForm("post");
+        },
+        sendForm(method) {
+            axios[method](`/post/userNew`, {
                     name: this.nameUser,
                     age: this.ageUser,
                     price: this.priceUser
@@ -27,9 +30,10 @@ const сalendar = new Vue({
                 })
                 .catch((error) => {
                     console.log(error);
-                })
+                });
         },
         updateUser(id, name, age, price) {
+            this.isEdit = true;
             this.id = id;
             this.nameUser = name;
             this.ageUser = age;
