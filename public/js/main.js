@@ -1,6 +1,7 @@
 const сalendar = new Vue({
     el: '#app',
     data: {
+        id: '',
         nameUser: '',
         ageUser: '',
         priceUser: '',
@@ -29,6 +30,7 @@ const сalendar = new Vue({
                 })
         },
         updateUser(id, name, age, price) {
+            this.id = id;
             this.nameUser = name;
             this.ageUser = age;
             this.priceUser = price;

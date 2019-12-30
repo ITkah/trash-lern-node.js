@@ -12,6 +12,7 @@
 
     <div id="app">
         <form @submit.prevent="sendForm" method="POST">
+            <input type="hidden" v-model="id" value="0">
             <input type="text" placeholder="name" min="1" v-model="nameUser" required>
             <input type="number" placeholder="age" min="1" v-model="ageUser" required>
             <input type="number" placeholder="price" min="1" v-model="priceUser" required>
