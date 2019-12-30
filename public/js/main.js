@@ -22,12 +22,13 @@ const сalendar = new Vue({
                 })
                 .then((response) => {
                     console.log(response);
+                    this.output = response.data;
                 })
                 .catch((error) => {
                     console.log(error);
                 })
         },
-        updateUser(id,name,age,price) {
+        updateUser(id, name, age, price) {
             this.nameUser = name;
             this.ageUser = age;
             this.priceUser = price;
@@ -41,6 +42,7 @@ const сalendar = new Vue({
                 })
                 .then((response) => {
                     console.log(response);
+                    this.output = response.data;
                 })
                 .catch((error) => {
                     console.log(error);
