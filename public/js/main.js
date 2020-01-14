@@ -9,17 +9,18 @@ const сalendar = new Vue({
         button: 'Отправить',
         isEdit: false,
     },
-    async created() {
-        this.output = (await new Promise((cb) => axios.get('/get/users')
-            .then(cb)
-            .catch(error => console.log(error)))).data;
+    async mounted() {
+        const response = await axios.get('/user');
+        response.error && console.log(response.error);
+        this.output = response.data;
     },
     methods: {
-        actionButton() {
-            this.isEdit ? this.sendForm("put") : this.sendForm("post");
+        sendForm() {
+            this.isEdit ? this.sendUser() : this.newUser();
         },
-        sendForm(method) {
-            axios[method](`/post/userNew`, {
+        newUser() {
+            axios
+                .post(`/user`, {
                     name: this.nameUser,
                     age: this.ageUser,
                     price: this.priceUser
@@ -32,8 +33,23 @@ const сalendar = new Vue({
                     console.log(error);
                 });
         },
-        updateUser(id, name, age, price) {
-            this.isEdit = true;
+        sendUser() {
+            axios
+                .put(`/user`, {
+                    id: this.id,
+                    name: this.nameUser,
+                    age: this.ageUser,
+                    price: this.priceUser
+                })
+                .then((response) => {
+                    console.log(response);
+                    this.output = response.data;
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
+        updateUser() {
             this.id = id;
             this.nameUser = name;
             this.ageUser = age;
@@ -41,10 +57,11 @@ const сalendar = new Vue({
             this.button = "Редактировать";
         },
         deleteUser(id) {
-            let deleteUser = id;
+            let idUser = id;
+            alert(idUser);
             axios
-                .post(`/post/deleteUser`, {
-                    id: deleteUser,
+                .delete(`/user`, {
+                    id: idUser,
                 })
                 .then((response) => {
                     console.log(response);

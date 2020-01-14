@@ -1,107 +1,82 @@
 const express = require('express');
-const router = require('./Classes/Router');
 const app = express();
-const fs = require('fs');
 const path = require('path');
-const jsonFile = path.join('./user.json');
 const jsonParser = express.json();
+const router = require('./Classes/Router');
+const users = new(require('./Classes/Users'))({
+    conf: {
+        users: {
+            path: path.join('./user.json'),
+            type: 'file'
+        }
+    }
+});
 
 app.use(express.static("public"));
 
-app.get('/get/users', function(req, res) {
+app.get('/user', function(req, res) {
 
-    fs.readFile(jsonFile, 'utf8', function(err, data) {
-        if (data) {
-            let users = JSON.parse(data);
-            res.send(users);
-        } else {
-            res.send("Error: " + err);
-        }
-    });
+    res.send(users.getUsers());
 
 });
 
-app.post("/post/userNew", jsonParser, function(req, res) {
+app.post('/user', jsonParser, function(req, res) {
 
-    if (!req.body) return res.sendStatus(400);
-
-    let nameUser = req.body.name;
-    let ageUser = req.body.age;
-    let priceUser = req.body.price;
-    let user = {
-        name: nameUser,
-        age: ageUser,
-        price: priceUser
+    const user = {
+        id: req.body.id,
+        name: req.body.name,
+        age: req.body.age,
+        price: req.body.price
     };
 
-    let data = fs.readFileSync(jsonFile, "utf8");
+    const usersData = users.getUsers();
+    let id = Math.max.apply(Math, usersData.map((o) => o.id));
 
-    let users = JSON.parse(data);
-    let id = Math.max.apply(Math, users.map(function(o) { return o.id; }))
-    user.id = id++;
-    users.push(user);
+    usersData.length >= 1 ? user.id = id + 1 : user.id = 1;
 
-    data = JSON.stringify(users);
-    fs.writeFileSync(jsonFile, data);
-    res.send(users);
+    usersData.push(user);
+
+    res.send(users.updateUsers(usersData));
 });
 
-app.put("/post/userNew", jsonParser, function(req, res){
-      
-    if(!req.body) return res.sendStatus(400);
-     
-    let idUser = req.body.id;
-    let nameUser = req.body.name;
-    let ageUser = req.body.age;
-    let priceUser = req.body.price;
-     
-    let data = fs.readFileSync(jsonFile, "utf8");
-    let users = JSON.parse(data);
-    let user;
-    for(var i = 0; i < users.length; i++){
-        if(users[i].id == idUser){
-            user = users[i];
-            break;
-        }
-    }
-    if(user){
-        user.age = nameUser;
-        user.name = ageUser;
-        user.price = priceUser;
-        data = JSON.stringify(users);
-        fs.writeFileSync(jsonFile, data);
-        res.send(users);
-    } else {
-        res.status(404).send(user);
-    }
-    
+
+app.put('/user', jsonParser, function(req, res) {
+
+    const user = {
+        id: req.body.id,
+        name: req.body.name,
+        age: req.body.age,
+        price: req.body.price
+    };
+
+    const usersData = users.getUsers();
+
+
+    usersData.push(user);
+
+    res.send(users.updateUsers(usersData));
 });
 
-app.post("/post/deleteUser", jsonParser, function(req, res) {
 
-    if (!req.body) return res.sendStatus(400);
+app.delete('/user', jsonParser, function(req, res) {
 
     let id = req.body.id;
-    let data = fs.readFileSync(jsonFile, "utf8");
-    let users = JSON.parse(data);
+
+    const usersData = users.getUsers();
 
     let index = -1;
 
-    for (let i = 0; i < users.length; i++) {
-        if (users[i].id == id) {
-            index = i;
-            break;
-        }
+    for (let i = 0; i < usersData.length; i++) {
+        usersData[i].id === id && (index = i);
     }
 
     if (index > -1) {
-        let user = users.splice(index, 1)[0];
-        data = JSON.stringify(users);
-        fs.writeFileSync(jsonFile, data);
-        res.send(users);
+        usersData.splice(index, 1)[0];
+        res.send(users.updateUsers(usersData));
     } else {
         res.status(404).send();
     }
+
 });
 
 app.use('/', router);
