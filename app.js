@@ -32,7 +32,7 @@ app.post('/user', jsonParser, function(req, res) {
     const usersData = users.getUsers();
     let id = Math.max.apply(Math, usersData.map((o) => o.id));
 
-    usersData.length >= 1 ? user.id = id + 1 : user.id = 1;
+    usersData.length >= 1 ? user.id = id + 1 : user.id = 0;
 
     usersData.push(user);
 
@@ -51,17 +51,9 @@ app.post('/user/upgrade', jsonParser, function(req, res) {
 
     const usersData = users.getUsers();
 
-    for (var i = 1; i < usersData.length; i++) {
-        if (usersData[i].id == user.id) {
-            user = usersData[i];
+    usersData.forEach((item, i) => user.id === i && (usersData[i] = user));
 
-            // usersData.name = user.name;
-            // usersData.age = user.age;
-            // usersData.price = user.price;
-
-            break;
-        }
-    }
+    res.send(users.updateUsers(usersData));
 
 });
 
