@@ -1,7 +1,7 @@
 const сalendar = new Vue({
     el: '#app',
     data: {
-        id: '',
+        idUser: '',
         nameUser: '',
         ageUser: '',
         priceUser: '',
@@ -27,6 +27,7 @@ const сalendar = new Vue({
                 })
                 .then((response) => {
                     console.log(response);
+                    console.log("new-user");
                     this.output = response.data;
                 })
                 .catch((error) => {
@@ -35,8 +36,8 @@ const сalendar = new Vue({
         },
         sendUser() {
             axios
-                .put(`/user`, {
-                    id: this.id,
+                .post(`/user/upgrade`, {
+                    id: this.idUser,
                     name: this.nameUser,
                     age: this.ageUser,
                     price: this.priceUser
@@ -49,18 +50,18 @@ const сalendar = new Vue({
                     console.log(error);
                 });
         },
-        updateUser() {
-            this.id = id;
-            this.nameUser = name;
-            this.ageUser = age;
-            this.priceUser = price;
+        updateUser(data) {
+            this.isEdit = true;
+            this.idUser = data.id;
+            this.nameUser = data.name;
+            this.ageUser = data.age;
+            this.priceUser = data.price;
             this.button = "Редактировать";
         },
         deleteUser(id) {
             let idUser = id;
-            alert(idUser);
             axios
-                .delete(`/user`, {
+                .post(`/user/delete`, {
                     id: idUser,
                 })
                 .then((response) => {

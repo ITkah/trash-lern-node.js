@@ -11,8 +11,8 @@
 <body>
 
     <div id="app">
-        <form method="POST" @submit.prevent="sendForm">
-            <input type="hidden" v-model="id">
+        <form method="POST" @submit.prevent="sendForm()">
+            <input type="hidden" v-model="idUser">
             <input type="hidden" v-model="isEdit">
             <input type="text" placeholder="name" min="1" v-model="nameUser" required>
             <input type="number" placeholder="age" min="1" v-model="ageUser" required>

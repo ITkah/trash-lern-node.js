@@ -40,9 +40,9 @@ app.post('/user', jsonParser, function(req, res) {
 });
 
 
-app.put('/user', jsonParser, function(req, res) {
+app.post('/user/upgrade', jsonParser, function(req, res) {
 
-    const user = {
+    let user = {
         id: req.body.id,
         name: req.body.name,
         age: req.body.age,
@@ -51,14 +51,22 @@ app.put('/user', jsonParser, function(req, res) {
 
     const usersData = users.getUsers();
 
+    for (var i = 1; i < usersData.length; i++) {
+        if (usersData[i].id == user.id) {
+            user = usersData[i];
 
-    usersData.push(user);
+            // usersData.name = user.name;
+            // usersData.age = user.age;
+            // usersData.price = user.price;
 
-    res.send(users.updateUsers(usersData));
+            break;
+        }
+    }
+
 });
 
 
-app.delete('/user', jsonParser, function(req, res) {
+app.post('/user/delete', jsonParser, function(req, res) {
 
     let id = req.body.id;
 
